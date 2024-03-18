@@ -8,7 +8,7 @@ A simple command line interface for the Bible.
 
 # Setup
 ```bash
-bible
+bible-cli
 ```
 Recommended versions 
 - NIV
