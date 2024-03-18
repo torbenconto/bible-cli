@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
 	"github.com/torbenconto/bible-cli/util"
 	"log"
 	"strings"
 
-	"github.com/spf13/cobra"
 	"github.com/torbenconto/bible"
 )
 
@@ -44,23 +44,25 @@ var searchCmd = &cobra.Command{
 			if bookName != "" && book.Name != bookName {
 				continue
 			}
-			for _, v := range book.Verses {
-				text := v.Text
-				if !caseSensitive {
-					query = strings.ToLower(query)
-					text = strings.ToLower(text)
-				}
-				if wordsOnly {
-					// Split text into words using whitespace and punctuation as delimiters
-					words := strings.FieldsFunc(text, func(r rune) bool {
-						return !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9'))
-					})
-					if containsPhrase(words, strings.Fields(query)) {
-						foundVerses = append(foundVerses, v)
+			for _, chapter := range book.Chapters {
+				for _, v := range chapter.Verses {
+					text := v.Text
+					if !caseSensitive {
+						query = strings.ToLower(query)
+						text = strings.ToLower(text)
 					}
-				} else {
-					if strings.Contains(text, query) {
-						foundVerses = append(foundVerses, v)
+					if wordsOnly {
+						// Split text into words using whitespace and punctuation as delimiters
+						words := strings.FieldsFunc(text, func(r rune) bool {
+							return !((r >= 'a' && r <= 'z') || (r >= 'A' && r <= 'Z') || (r >= '0' && r <= '9'))
+						})
+						if containsPhrase(words, strings.Fields(query)) {
+							foundVerses = append(foundVerses, v)
+						}
+					} else {
+						if strings.Contains(text, query) {
+							foundVerses = append(foundVerses, v)
+						}
 					}
 				}
 			}

@@ -25,19 +25,21 @@ var readCmd = &cobra.Command{
 		startReading := false
 
 		for _, book := range ctxBible.Books {
-			for _, verse := range book.Verses {
-				// Remove book name from verse name
-				if strings.ToLower(verse.Name) == strings.ToLower(startVerse) {
-					fmt.Println("Press enter to show the next verse or q and then enter to quit")
-					startReading = true
-				}
+			for _, chapter := range book.Chapters {
+				for _, verse := range chapter.Verses {
+					// Remove book name from verse name
+					if strings.ToLower(verse.Name) == strings.ToLower(startVerse) {
+						fmt.Println("Press enter to show the next verse or q and then enter to quit")
+						startReading = true
+					}
 
-				if startReading {
-					name := strings.Replace(verse.Name, book.Name+" ", "", 1)
-					fmt.Printf("%s: %s\n", name, verse.Text)
-					input, _ := reader.ReadString('\n')
-					if input == "q\n" {
-						return
+					if startReading {
+						name := strings.Replace(verse.Name, book.Name+" ", "", 1)
+						fmt.Printf("%s: %s\n", name, verse.Text)
+						input, _ := reader.ReadString('\n')
+						if input == "q\n" {
+							return
+						}
 					}
 				}
 			}

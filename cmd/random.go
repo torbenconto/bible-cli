@@ -32,14 +32,18 @@ var randomCmd = &cobra.Command{
 			}
 
 			if book.Name == "" {
-				log.Fatalf("Custom book not found, run bible books to retireve a list of availible books")
+				log.Fatalf("Custom book not found, run bible books to retrieve a list of available books")
 			}
 		} else {
 			book = ctxBible.Books[rand.Intn(len(ctxBible.Books))]
 		}
 
 		for i := 0; i < count; i++ {
-			verse := book.Verses[rand.Intn(len(book.Verses))]
+			// Select a random chapter from the book
+			chapter := book.Chapters[rand.Intn(len(book.Chapters))]
+
+			// Select a random verse from the chapter
+			verse := chapter.Verses[rand.Intn(len(chapter.Verses))]
 			fmt.Println(verse.Name, verse.Text)
 		}
 	},

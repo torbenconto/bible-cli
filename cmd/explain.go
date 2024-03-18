@@ -47,15 +47,17 @@ var explainCmd = &cobra.Command{
 
 		// Call the explanation function and print the result
 		for _, book := range ctxBible.Books {
-			for _, v := range book.Verses {
-				if strings.ToLower(v.Name) == verse {
-					explanation, err := explainVerse(v.Text)
-					if err != nil {
-						fmt.Println("Error explaining verse:", err)
-						return
-					}
+			for _, chapter := range book.Chapters {
+				for _, v := range chapter.Verses {
+					if strings.ToLower(v.Name) == verse {
+						explanation, err := explainVerse(v.Text)
+						if err != nil {
+							fmt.Println("Error explaining verse:", err)
+							return
+						}
 
-					fmt.Println("Explanation:", explanation)
+						fmt.Println("Explanation:", explanation)
+					}
 				}
 			}
 		}

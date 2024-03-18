@@ -18,7 +18,7 @@ var getCmd = &cobra.Command{
 
 		verse := args[0]
 
-		verses := ctxBible.ParseVerse(verse)
+		verses := ctxBible.GetVerse(verse)
 
 		if len(verses) == 0 {
 			log.Fatal("No results found")

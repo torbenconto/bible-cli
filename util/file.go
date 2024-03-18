@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"strconv"
 	"strings"
 	"unicode"
 )
@@ -47,17 +48,22 @@ func LoadSourceFile(b *bible.Bible) *bible.Bible {
 		// Split the line into words
 		words := strings.Fields(line)
 
-		// Identify the book name and verse
+		// Identify the book name, chapter number and verse
 		bookName := ""
+		chapterNumber := 0
 		verseStartIndex := 0
 		for i, word := range words {
-			if unicode.IsDigit(rune(word[0])) && i != 0 { // Ignore the first word starting with a digit
-				verseStartIndex = i
-				break
+			if unicode.IsDigit(rune(word[0])) {
+				if i == 0 { // The first word starting with a digit is the chapter number
+					chapterNumber, _ = strconv.Atoi(word)
+				} else { // The second word starting with a digit is the start of the verse
+					verseStartIndex = i
+					break
+				}
+			} else {
+				bookName += word + " "
 			}
-			bookName += word + " "
 		}
-
 		bookName = strings.TrimSpace(bookName)
 
 		verseName := bookName + " " + words[verseStartIndex]
@@ -72,13 +78,27 @@ func LoadSourceFile(b *bible.Bible) *bible.Bible {
 			}
 		}
 		if currentBook == nil {
-			newBook := bible.NewBook(bookName, []bible.Verse{})
+			newBook := bible.NewBook(bookName, []bible.Chapter{})
 			b.Books = append(b.Books, *newBook)
 			currentBook = &b.Books[len(b.Books)-1]
 		}
 
-		// Add the verse to the current book
-		currentBook.Verses = append(currentBook.Verses, *bible.NewVerse(verseName, verseText))
+		// Check if the chapter already exists, if not, create a new chapter
+		var currentChapter *bible.Chapter
+		for i := range currentBook.Chapters {
+			if currentBook.Chapters[i].Number == chapterNumber {
+				currentChapter = &currentBook.Chapters[i]
+				break
+			}
+		}
+		if currentChapter == nil {
+			newChapter := bible.Chapter{Number: chapterNumber, Verses: []bible.Verse{}}
+			currentBook.Chapters = append(currentBook.Chapters, newChapter)
+			currentChapter = &currentBook.Chapters[len(currentBook.Chapters)-1]
+		}
+
+		// Add the verse to the current chapter
+		currentChapter.Verses = append(currentChapter.Verses, *bible.NewVerse(verseName, verseText))
 	}
 
 	if err := scanner.Err(); err != nil {

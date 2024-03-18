@@ -40,7 +40,7 @@ var compareCmd = &cobra.Command{
 		}
 
 		for _, version := range targetVersions {
-			verses := targetBible.ParseVerse(verse)
+			verses := targetBible.GetVerse(verse)
 
 			if len(verses) == 0 {
 				log.Fatal("No results found")
