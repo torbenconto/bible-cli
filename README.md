@@ -3,7 +3,7 @@ A simple command line interface for the Bible.
 
 ## Installation
 ```bash
- go install github.com/torbenconto/bible
+ go install github.com/torbenconto/bible@latest
 ```
 
 # Setup
