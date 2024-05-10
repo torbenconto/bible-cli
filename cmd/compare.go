@@ -37,9 +37,7 @@ var compareCmd = &cobra.Command{
 				util.LoadSourceFile(newBible)
 				targetBible = newBible
 			}
-		}
 
-		for _, version := range targetVersions {
 			verses := targetBible.GetVerse(verse)
 
 			if len(verses) == 0 {
