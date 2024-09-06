@@ -21,7 +21,7 @@ var readCmd = &cobra.Command{
 		reader := bufio.NewReader(os.Stdin)
 
 		if len(args) == 0 {
-			args[0] = "Genesis 1:1"
+			args = append(args, "Genesis 1:1")
 		}
 
 		startVerse := args[0]
