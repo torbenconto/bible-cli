@@ -11,7 +11,7 @@ import (
 )
 
 var readCmd = &cobra.Command{
-	Use:   "read",
+	Use:   "read [starting] [flags]",
 	Short: "Read the Bible",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
@@ -19,6 +19,10 @@ var readCmd = &cobra.Command{
 		ctxBible := util.GetFromContext(cmd.Context())
 
 		reader := bufio.NewReader(os.Stdin)
+
+		if len(args) == 0 {
+			args[0] = "Genesis 1:1"
+		}
 
 		startVerse := args[0]
 
