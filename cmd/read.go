@@ -13,7 +13,7 @@ import (
 var readCmd = &cobra.Command{
 	Use:   "read [starting] [flags]",
 	Short: "Read the Bible",
-	Args:  cobra.ExactArgs(1),
+	Args:  cobra.MaximumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		// Get the Bible from the context
 		ctxBible := util.GetFromContext(cmd.Context())
